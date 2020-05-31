@@ -1,31 +1,28 @@
 package base;
 
-
-import java.io.IOException;
-
 public class Application {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
 
-        DirectedGraph graph = new DirectedGraph();
-//        graph.addVertex(1);
-//        graph.addVertex(2);
-//        graph.addEdge(1,2);
-//        graph.addVertex(3);
-//
-//
-//        graph.addEdge(1,3);
-//
-//        graph.display();
-//
-//        graph.saveGraph();
+        Stack<Integer> stack = new Stack<>(10);
+        System.out.println("Проверка на пустоту:");
+        System.out.println(stack.empty());
+        System.out.println("--------------");
 
-        System.out.println("Loading graph");
-        graph.loadGraph();
+        System.out.println("Добавление элементов: 1,2,3,4");
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        stack.push(4);
+        System.out.println("--------------");
 
-        graph.display();
+        System.out.println("Вывод элементов в порядке расположения");
+        stack.printStack();
+        System.out.println("--------------");
 
-        char c = '\n';
-        System.out.print((int) c);
+        System.out.println("Удаление элемента: ");
+        stack.pop();
+        stack.printStack();
+        System.out.println("--------------");
 
     }
 }
