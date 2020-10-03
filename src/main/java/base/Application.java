@@ -1,18 +1,15 @@
 package base;
 
+import base.config.BotConfig;
 
-import base.conn.JdbcConnection;
-
-import java.sql.Connection;
-import java.util.Optional;
+import java.util.logging.Logger;
 
 public class Application {
 
     public static void main(String[] args) {
-
-        Optional<Connection> connection = JdbcConnection.getConnection();
-        if (connection.isPresent())
-            System.out.println("Success");
+        Logger logger=Logger.getLogger("global");
+        new BotConfig().configure();
+        logger.info("Bot started");
     }
 
 }
