@@ -1,15 +1,15 @@
 package base;
 
-import base.config.BotConfig;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.logging.Logger;
 
+@SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
-        Logger logger=Logger.getLogger("global");
-        new BotConfig().configure();
-        logger.info("Bot started");
+        SpringApplication.run(Application.class, args);
+
     }
 
 }

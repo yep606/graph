@@ -3,3 +3,4 @@
 *.idea
 *.iml
 app-dev.properties
+application-dev.properties

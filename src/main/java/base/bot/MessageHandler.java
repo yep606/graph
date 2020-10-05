@@ -15,6 +15,8 @@ public class MessageHandler {
     }
 
     public void process(List<Update> updates) {
-        updates.forEach(update -> bot.execute(new SendMessage(update.message().chat().id(),"Hello, world!")));
+        updates.forEach(update ->{
+            bot.execute(new SendMessage(update.message().chat().id(),"Hello, world!"));
+        });
     }
 }
