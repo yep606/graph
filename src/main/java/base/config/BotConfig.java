@@ -1,19 +1,15 @@
 package base.config;
 
-import base.bot.MessageHandler;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SetWebhook;
 import com.pengrad.telegrambot.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
 
-@Component
+@Configuration
 public class BotConfig {
-
-    private final TelegramBot bot;
-    private final MessageHandler messageHandler;
 
     @Value("${BOT_TOKEN}")
     private String BOT_TOKEN;
@@ -21,13 +17,9 @@ public class BotConfig {
     @Value("${NGROK_URL}")
     private String NGROK_URL;
 
-    public BotConfig() {
-        this.bot = new TelegramBot(BOT_TOKEN);
-        this.messageHandler = new MessageHandler(bot);
-    }
-
-    @PostConstruct
-    public void configure() {
+    @Bean
+    public TelegramBot telegramBot(){
+        TelegramBot bot = new TelegramBot(BOT_TOKEN);
         System.out.println("Executing method after spring boot initialization");
         String URL = String.format("https://api.telegram.org/bot%s/setWebhook?url=%s",
                 BOT_TOKEN, NGROK_URL);
@@ -36,6 +28,7 @@ public class BotConfig {
         BaseResponse response = bot.execute(request);
         boolean ok = response.isOk();
         System.out.println(ok);
-
+        return bot;
     }
+
 }
