@@ -22,7 +22,8 @@ public class UpdateHandler {
         this.bot = telegramBot;
     }
 
-    public void handleUpdate(String response){
+    public void onWebhookUpdateReceived(String response){
+        
         Update update = BotUtils.parseUpdate(response);
         if(update.message().text().equals("hello")){
             bot.execute(new SendMessage(update.message().chat().id(), "Answer back!"), new Callback() {

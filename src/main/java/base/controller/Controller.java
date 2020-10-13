@@ -16,9 +16,9 @@ public class Controller {
         this.updateHandler = updateHandler;
     }
 
-    @PostMapping("/")
+    @PostMapping("/webhook")
     public void onUpdateReceived(@RequestBody String request){
-        updateHandler.handleUpdate(request);
+        updateHandler.onWebhookUpdateReceived(request);
     }
 
 

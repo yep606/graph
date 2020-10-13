@@ -4,3 +4,5 @@
 *.iml
 app-dev.properties
 application-dev.properties
+package-lock.json
+node_modules
