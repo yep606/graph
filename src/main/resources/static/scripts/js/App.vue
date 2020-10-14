@@ -1,16 +1,21 @@
 <template>
     <div id="app">
-        {{greeting}} world!
+        {{info}}
     </div>
 </template>
 
 <script>
-
+    import axios from 'axios'
     export default {
         data() {
             return {
-                greeting: "fuck you!"
+                info: null
             }
+        },
+        mounted() {
+            axios
+                .get('http://localhost:8080/task')
+                .then(response => (this.info = response.data))
         }
     }
 </script>
