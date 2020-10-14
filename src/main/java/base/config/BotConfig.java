@@ -25,9 +25,9 @@ public class BotConfig {
                 BOT_TOKEN, NGROK_URL);
         SetWebhook request = new SetWebhook()
                 .url(URL);
-        BaseResponse response = bot.execute(request);
-        boolean ok = response.isOk();
-        System.out.println(ok);
+//        BaseResponse response = bot.execute(request);
+//        boolean ok = response.isOk();
+//        System.out.println(ok);
         return bot;
     }
 
