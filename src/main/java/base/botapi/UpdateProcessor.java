@@ -1,9 +1,13 @@
 package base.botapi;
 
 import base.botapi.states.BotState;
+import base.cache.DataCache;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.ForceReply;
+import com.pengrad.telegrambot.model.request.KeyboardButton;
+import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +18,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class UpdateProcessor {
 
-    final TelegramBot bot;
+    private final TelegramBot bot;
+    private final DataCache dataCache;
+    private final BotContext botContext;
 
     @Autowired
-    public UpdateProcessor(TelegramBot telegramBot) {
+    public UpdateProcessor(TelegramBot telegramBot, DataCache dataCache, BotContext botContext) {
         this.bot = telegramBot;
+        this.dataCache = dataCache;
+        this.botContext = botContext;
     }
 
     public void onUpdateReceived(Update update){
@@ -37,20 +45,24 @@ public class UpdateProcessor {
         int userId = message.from().id();
         BotState botState;
         SendMessage replyMessage;
-        switch (inputMsg){
+        switch (inputMsg) {
             case "/start":
                 botState = BotState.MAIN_MENU;
                 break;
-            case "Заказать работу":
-                botState = BotState.ASK_LABS;
-                break;
+//            case "Заказать работу":
+//                botState = BotState.ASK_LABS;
+//                break;
             case "О нас":
                 botState = BotState.INFO;
                 break;
             default:
-                botState = userDataCache.getUsersCurrentBotState(userId);
+                botState = dataCache.getUsersCurrentBotState(userId);
                 break;
         }
+
+        dataCache.setUsersCurrentBotState(userId, botState);
+
+        replyMessage = botContext.processInputMessage(botState, message);
         return replyMessage;
     }
 

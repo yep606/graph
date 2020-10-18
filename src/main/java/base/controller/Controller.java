@@ -17,7 +17,7 @@ public class Controller {
         this.updateProcessor = updateProcessor;
     }
 
-    @PostMapping("/webhook")
+    @PostMapping("/")
     public void onUpdateReceived(@RequestBody String request) {
         updateProcessor.onUpdateReceived(BotUtils.parseUpdate(request));
     }
