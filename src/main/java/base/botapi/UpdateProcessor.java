@@ -30,14 +30,18 @@ public class UpdateProcessor {
     }
 
     public void onUpdateReceived(Update update){
-        SendMessage replyMessage = null;
-        Message message = update.message();
-        if (message != null && !"".equals(message.text())) {
-            log.info("New message from User:{}, chatId: {},  with text: {}",
-                    message.from().username(), message.chat().id(), message.text());
-            replyMessage = handleInputMessage(message);
+        if(update.inlineQuery() != null)
+            System.out.println(update.inlineQuery().query());
+        else {
+            SendMessage replyMessage = null;
+            Message message = update.message();
+            if (message != null && !"".equals(message.text())) {
+                log.info("New message from User:{}, chatId: {},  with text: {}",
+                        message.from().username(), message.chat().id(), message.text());
+                replyMessage = handleInputMessage(message);
+            }
+            bot.execute(replyMessage);
         }
-        bot.execute(replyMessage);
     }
 
     private SendMessage handleInputMessage(Message message) {
@@ -49,9 +53,9 @@ public class UpdateProcessor {
             case "/start":
                 botState = BotState.MAIN_MENU;
                 break;
-//            case "Заказать работу":
-//                botState = BotState.ASK_LABS;
-//                break;
+            case "Заказать работу":
+                botState = BotState.ASK_LABS;
+                break;
             case "О нас":
                 botState = BotState.INFO;
                 break;

@@ -10,7 +10,7 @@ public class TaskController {
     @GetMapping("/task")
     public Task mainPage(){
 
-        return new Task("New task!");
+        return null;
     }
 
 }

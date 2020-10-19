@@ -25,6 +25,19 @@ public class BotContext {
     }
 
     private InputMessageHandler findMessageHandler(BotState currentState) {
+        if(isFillingLab(currentState))
+            return messageHandlers.get(BotState.ASK_LABS);
         return messageHandlers.get(currentState);
+    }
+
+    private boolean isFillingLab(BotState currentState) {
+        switch (currentState){
+            case ASK_DESCRIPTION:
+            case ASK_EXPIRATION:
+            case ASK_LABS:
+            case LAB_FILLED:
+                return true;
+            default: return false;
+        }
     }
 }
