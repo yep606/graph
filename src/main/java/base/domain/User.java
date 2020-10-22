@@ -18,6 +18,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String username;
+    private Integer taskCount;
 
     @OneToMany(mappedBy = "user")
     private Set<Task> tasks;

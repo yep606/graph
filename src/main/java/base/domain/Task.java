@@ -3,6 +3,7 @@ package base.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class Task {
     private Long id;
     private LocalDateTime expiration;
     private String description;
+    private boolean isFilled;
 
     @ManyToOne
     @JoinColumn(name = "usr_id", nullable = false)

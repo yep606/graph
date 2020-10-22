@@ -6,10 +6,8 @@ import base.domain.Task;
 import base.domain.User;
 import base.repo.TaskRepo;
 import base.repo.UserRepo;
+import base.service.TaskService;
 import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.request.Keyboard;
-import com.pengrad.telegrambot.model.request.KeyboardButton;
-import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,26 +20,30 @@ public class LabHandler implements InputMessageHandler {
     private final DataCache dataCache;
     private final TaskRepo taskRepo;
     private final UserRepo userRepo;
+    private final TaskService taskService;
 
     @Autowired
-    public LabHandler(DataCache dataCache, TaskRepo taskRepo, UserRepo userRepo) {
+    public LabHandler(DataCache dataCache, TaskRepo taskRepo, UserRepo userRepo, TaskService taskService) {
         this.dataCache = dataCache;
         this.taskRepo = taskRepo;
         this.userRepo = userRepo;
+        this.taskService = taskService;
     }
+
+//    @Override
+//    public SendMessage handle(Message message) {
+//        if (dataCache.getUsersCurrentBotState(message.from().id()).equals(BotState.ASK_LABS))
+//                dataCache.setUsersCurrentBotState(message.from().id(), BotState.ASK_EXPIRATION);
+//        dataCache.setUsersCurrentBotState(taskService.verifyTasks());
+//        return processMessage(message);
+//    }
 
     @Override
     public SendMessage handle(Message message) {
-        if (dataCache.getUsersCurrentBotState(message.from().id()).equals(BotState.ASK_LABS))
-                dataCache.setUsersCurrentBotState(message.from().id(), BotState.ASK_EXPIRATION);
-        return processMessage(message);
-    }
-
-    private SendMessage processMessage(Message message) {
         String usrMessage = message.text();
         long userId = message.from().id();
         long chatId = message.chat().id();
-        BotState botState = dataCache.getUsersCurrentBotState(userId);
+        BotState botState = taskService.verifyTasks(userId);
         SendMessage replyMessage = null;
 
         if (botState.equals(BotState.ASK_EXPIRATION)){
@@ -59,16 +61,15 @@ public class LabHandler implements InputMessageHandler {
         }
 
         if (botState.equals(BotState.LAB_FILLED)){
-            Keyboard keyboard = new ReplyKeyboardMarkup(
-                    new KeyboardButton[]{
-                            new KeyboardButton("Заказать работу"),
-                            new KeyboardButton("О нас")
-                    }
-            ).oneTimeKeyboard(false);
             Task task = taskRepo.findByUserTelegramId(userId);
             task.setDescription(usrMessage);
             taskRepo.save(task);
-            replyMessage = new SendMessage(chatId, "Заявка принята. Ожидайте подтверждения в течении 6 часов").replyMarkup(keyboard);
+            replyMessage = new SendMessage(chatId, "Заявка принята. Ожидайте подтверждения в течении 6 часов");
+            dataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
+        }
+
+        if (botState.equals(BotState.TASKS_LIMIT)){
+            replyMessage = new SendMessage(chatId, "Превышен лимит по задачам");
             dataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
         }
         return replyMessage;
