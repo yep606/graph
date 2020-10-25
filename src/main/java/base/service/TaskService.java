@@ -1,14 +1,13 @@
 package base.service;
 
 import base.botapi.states.BotState;
-import base.cache.DataCache;
 import base.domain.Task;
+import base.domain.User;
 import base.repo.TaskRepo;
 import base.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -22,23 +21,15 @@ public class TaskService {
         this.userRepo = userRepo;
     }
 
-    public BotState verifyTasks(long userId){
-        if (userRepo.findById(userId).get().getTaskCount() >= 2)
-            return BotState.TASKS_LIMIT;
-
-        Optional<Task> checkTask = taskRepo.findByUserTelegramIdAndFilled(userId, false);
-        if (checkTask.isPresent()){
-            Task task = checkTask.get();
-            if (task.getExpiration() == null)
-                return BotState.ASK_EXPIRATION;
-            else
-                return BotState.ASK_DESCRIPTION;
-
-        }
-        else
-            return BotState.ASK_EXPIRATION;
-
+    public boolean hasLimit(long userId){
+        return userRepo.findByTelegramId(userId).get().getTaskCount() >= 2;
+//        return true;
     }
 
-
+    public void save(long userId, Task task) {
+        User user = userRepo.findByTelegramId(userId).get();
+        user.setTaskCount(user.getTaskCount() + 1);
+        task.setUser(user);
+        taskRepo.save(task);
+    }
 }

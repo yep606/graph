@@ -26,7 +26,7 @@ public class MainMenuHandler implements InputMessageHandler {
 
         long userId = message.from().id();
         long chatId = message.chat().id();
-        if (!userRepo.findById(userId).isPresent()){
+        if (!userRepo.findByTelegramId(userId).isPresent()){
             User newUser = new User();
             newUser.setFirstName(message.from().firstName());
             newUser.setLastName(message.from().lastName());

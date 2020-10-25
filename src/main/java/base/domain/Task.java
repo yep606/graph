@@ -1,17 +1,13 @@
 package base.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.springframework.lang.Nullable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
 @Data
-@ToString(of = {"id", "description"})
-@EqualsAndHashCode(of = {"id"})
+@Entity
 public class Task {
 
     public Task(){}
@@ -21,13 +17,12 @@ public class Task {
     private Long id;
     private LocalDateTime expiration;
     private String description;
-    private boolean isFilled;
+    private boolean filled;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "usr_id", nullable = false)
     private User user;
-
-
 
 
 
