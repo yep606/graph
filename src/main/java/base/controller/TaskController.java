@@ -23,7 +23,6 @@ public class TaskController {
 
     @GetMapping("/tasks")
     public List<Task> mainPage(){
-
         return taskRepo.findAll();
     }
 
