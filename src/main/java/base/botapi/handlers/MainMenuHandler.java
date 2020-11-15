@@ -23,9 +23,9 @@ public class MainMenuHandler implements InputMessageHandler {
 
     @Override
     public SendMessage handle(Message message) {
-
         long userId = message.from().id();
         long chatId = message.chat().id();
+
         if (!userRepo.findByTelegramId(userId).isPresent()){
             User newUser = new User();
             newUser.setFirstName(message.from().firstName());
@@ -35,11 +35,11 @@ public class MainMenuHandler implements InputMessageHandler {
             userRepo.save(newUser);
         }
 
-
         Keyboard keyboard = new ReplyKeyboardMarkup(
                 new KeyboardButton[]{
                         new KeyboardButton("Заказать работу"),
-                        new KeyboardButton("О нас")
+                        new KeyboardButton("О нас"),
+                        new KeyboardButton("Текущие работы"),
                 }
         ).oneTimeKeyboard(false);
 

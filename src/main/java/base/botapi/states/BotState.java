@@ -8,6 +8,7 @@ public enum BotState {
     ASK_EXPIRATION,
     ASK_DESCRIPTION,
     LAB_FILLED,
-    TASKS_LIMIT
+    TASKS_LIMIT,
+    ASK_WORKSHEET
 
 }

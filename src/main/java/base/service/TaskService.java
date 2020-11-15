@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class TaskService {
@@ -32,9 +34,11 @@ public class TaskService {
         User user = userRepo.findByTelegramId(userId).get();
         user.setTaskCount(user.getTaskCount() + 1);
         task.setUser(user);
-        taskRepo.save(task);
         System.out.println("Отправка вебсокета");
-        messageTemplate.convertAndSend("/topic/tasks", taskRepo.findAll());
+        messageTemplate.convertAndSend("/topic/tasks", taskRepo.save(task));
+    }
 
+    public List<Task> getUserTasks(long userId) {
+       return taskRepo.findByUser(userRepo.findByTelegramId(userId).get());
     }
 }

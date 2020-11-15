@@ -59,6 +59,9 @@ public class UpdateProcessor {
             case "О нас":
                 botState = BotState.INFO;
                 break;
+            case "Текущие работы":
+                botState = BotState.ASK_WORKSHEET;
+                break;
             default:
                 botState = dataCache.getUsersCurrentBotState(userId);
                 break;
