@@ -13,10 +13,8 @@ import java.util.Date;
 @Slf4j
 public class JwtUtils {
 
-    @Value("${bezkoder.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${bezkoder.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
 
