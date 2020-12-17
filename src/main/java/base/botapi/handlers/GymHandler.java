@@ -3,10 +3,10 @@ package base.botapi.handlers;
 import base.botapi.states.BotState;
 import base.cache.DataCache;
 import base.service.RestService;
-import base.util.PaymentResponse;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.*;
-import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.*;
+import com.pengrad.telegrambot.response.SendResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ public class GymHandler implements InputMessageHandler {
     }
 
     @Override
-    public SendMessage handle(Message message) {
+    public BaseRequest<? extends AbstractSendRequest<?>, SendResponse> handle(Message message) {
         long userId = message.from().id();
         long chatId = message.chat().id();
 
@@ -59,13 +59,14 @@ public class GymHandler implements InputMessageHandler {
         if (botState.equals(BotState.WAITING_FOR_PAYMENT)){
             if (message.text().equals("Готово!") && verifyPayment(userId)){
                 dataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
-                return new SendMessage(chatId, "Типо отправил файл --файл--");
+                return new SendDocument(chatId, "http://techslides.com/demos/sample-videos/small.mp4");
             }
             return new SendMessage(chatId, "Произошла ошибка, попробуйте еще раз или подождите. А может я просто наебал вас на деньги");
 
         }
 
-        return new SendMessage(chatId, "Хуй");
+//        return new SendMessage(chatId, "Хуй");
+        return new SendVideo(chatId, "dsds");
     }
 
     private boolean verifyPayment(Long userId) {

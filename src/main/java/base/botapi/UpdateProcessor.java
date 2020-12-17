@@ -8,7 +8,9 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.ForceReply;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.SendResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,7 +35,7 @@ public class UpdateProcessor {
         if(update.inlineQuery() != null)
             System.out.println(update.inlineQuery().query());
         else {
-            SendMessage replyMessage = null;
+            BaseRequest replyMessage = null;
             Message message = update.message();
             if (message != null && !"".equals(message.text())) {
                 log.info("New message from User:{}, chatId: {},  with text: {}",
@@ -44,13 +46,13 @@ public class UpdateProcessor {
         }
     }
 
-    private SendMessage handleInputMessage(Message message) {
+    private BaseRequest<SendMessage, SendResponse> handleInputMessage(Message message) {
         String inputMsg = message.text();
         int userId = message.from().id();
         if (inputMsg == null)
             return  new SendMessage(message.chat().id(), "Понимаю только текст!");
         BotState botState;
-        SendMessage replyMessage;
+        BaseRequest replyMessage;
         switch (inputMsg) {
             case "/start":
                 botState = BotState.MAIN_MENU;

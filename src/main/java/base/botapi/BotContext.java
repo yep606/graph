@@ -3,6 +3,7 @@ package base.botapi;
 import base.botapi.handlers.InputMessageHandler;
 import base.botapi.states.BotState;
 import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class BotContext {
         autowiredHandlers.forEach(handler -> this.messageHandlers.put(handler.getHandlerName(), handler));
     }
 
-    public SendMessage processInputMessage(BotState currentState, Message message) {
+    public BaseRequest processInputMessage(BotState currentState, Message message) {
         InputMessageHandler currentMessageHandler = findMessageHandler(currentState);
         return currentMessageHandler.handle(message);
     }
