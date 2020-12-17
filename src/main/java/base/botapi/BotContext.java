@@ -4,6 +4,7 @@ import base.botapi.handlers.InputMessageHandler;
 import base.botapi.states.BotState;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -15,6 +16,7 @@ public class BotContext {
 
     private Map<BotState, InputMessageHandler> messageHandlers = new HashMap<>();
 
+    @Autowired
     public BotContext(List<InputMessageHandler> autowiredHandlers) {
         autowiredHandlers.forEach(handler -> this.messageHandlers.put(handler.getHandlerName(), handler));
     }
@@ -25,17 +27,15 @@ public class BotContext {
     }
 
     private InputMessageHandler findMessageHandler(BotState currentState) {
-        if(isFillingLab(currentState))
-            return messageHandlers.get(BotState.ASK_LABS);
+        if(isBuyingGym(currentState))
+            return messageHandlers.get(BotState.BUY_GYM);
         return messageHandlers.get(currentState);
     }
 
-    private boolean isFillingLab(BotState currentState) {
+    private boolean isBuyingGym(BotState currentState) {
         switch (currentState){
-            case ASK_DESCRIPTION:
-            case ASK_EXPIRATION:
-            case ASK_LABS:
-            case LAB_FILLED:
+            case GYM_PAYMENT:
+            case WAITING_FOR_PAYMENT:
                 return true;
             default: return false;
         }

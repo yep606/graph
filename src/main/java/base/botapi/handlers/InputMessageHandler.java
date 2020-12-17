@@ -6,8 +6,9 @@ import com.pengrad.telegrambot.request.SendMessage;
 
 public interface InputMessageHandler {
 
+    BotState getHandlerName();
+
     SendMessage handle(Message message);
 
-    BotState getHandlerName();
 
 }

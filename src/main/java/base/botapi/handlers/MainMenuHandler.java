@@ -37,9 +37,8 @@ public class MainMenuHandler implements InputMessageHandler {
 
         Keyboard keyboard = new ReplyKeyboardMarkup(
                 new KeyboardButton[]{
-                        new KeyboardButton("Заказать работу"),
+                        new KeyboardButton("Купить гимнастику"),
                         new KeyboardButton("О нас"),
-                        new KeyboardButton("Текущие работы"),
                 }
         ).oneTimeKeyboard(false);
 

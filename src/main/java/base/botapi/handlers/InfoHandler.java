@@ -26,12 +26,6 @@ public class InfoHandler implements InputMessageHandler {
                 }
         );
 
-        Keyboard keyboard = new ReplyKeyboardMarkup(
-                new KeyboardButton[]{
-                        new KeyboardButton("Назад"),
-                }
-        );
-
         return new SendMessage(chatId, INFO).replyMarkup(inlineKeyboard);
     }
 

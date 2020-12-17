@@ -47,25 +47,25 @@ public class UpdateProcessor {
     private SendMessage handleInputMessage(Message message) {
         String inputMsg = message.text();
         int userId = message.from().id();
+        if (inputMsg == null)
+            return  new SendMessage(message.chat().id(), "Понимаю только текст!");
         BotState botState;
         SendMessage replyMessage;
         switch (inputMsg) {
             case "/start":
                 botState = BotState.MAIN_MENU;
                 break;
-            case "Заказать работу":
-                botState = BotState.ASK_LABS;
-                break;
             case "О нас":
                 botState = BotState.INFO;
                 break;
-            case "Текущие работы":
-                botState = BotState.ASK_WORKSHEET;
+            case "Купить гимнастику":
+                botState = BotState.BUY_GYM;
                 break;
             default:
                 botState = dataCache.getUsersCurrentBotState(userId);
                 break;
         }
+
 
         dataCache.setUsersCurrentBotState(userId, botState);
 
